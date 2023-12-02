@@ -36,6 +36,7 @@ import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -54,17 +55,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Scan_Distance extends LinearOpMode {
 
     private DistanceSensor sensorDistance;
+    Servo servo;
+    static final int points = 15;
+    static final double MIN_POS=0.0;
+    static final double MAX_POS = 1.0*140/270; //1.0;
+
+    static final double INCREMENT =  (MAX_POS-MIN_POS)/(points -1);   //0.05;  //.01
+    double position = 0; //(MAX_POS-MIN_POS)/2;
+    int index = 0;
+    static final int CYCLE_MS = 50;
+    //1000;  //50
+    boolean rampUp =true;
+    double[] distance_array = new double[points];
+    double[] servo_array = new double[points];
 
     @Override
     public void runOpMode() {
         // you can use this as a regular DistanceSensor.
 
-        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_distance");
-        // "servo_distance"
-
-        // you can also cast this to a Rev2mDistanceSensor if you want to use added
-        // methods associated with the Rev2mDistanceSensor class.
+        sensorDistance = hardwareMap.get(DistanceSensor.class, "sensor_distance");  // "servo_distance"
         Rev2mDistanceSensor sensorTimeOfFlight = (Rev2mDistanceSensor) sensorDistance;
+        servo = hardwareMap.get(Servo.class,"servo_distance");
 
         telemetry.addData(">>", "Press start to continue");
         telemetry.update();
@@ -72,17 +83,45 @@ public class Scan_Distance extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             // generic DistanceSensor methods.
-            telemetry.addData("deviceName", sensorDistance.getDeviceName() );
+            if (rampUp) {    // Keep stepping up until we hit the max value.
+                index += 1;
+                position = MIN_POS + index*INCREMENT;    //+= INCREMENT ;
+                if (position >= MAX_POS ) {
+                    position = MAX_POS;
+                    rampUp = !rampUp;   // Switch ramp direction
+                }
+            }
+            else {    // Keep stepping down until we hit the min value.
+                index -= 1;
+                position = MIN_POS + index*INCREMENT; //-= INCREMENT ;
+                if (position <= MIN_POS ) {
+                    position = MIN_POS;
+                    rampUp = !rampUp;  // Switch ramp direction
+                }
+            }
+            distance_array[index] = sensorDistance.getDistance(DistanceUnit.CM);
+            servo_array[index] = position;
+            for(int i=0; i<points; i++){
+                telemetry.addData(String.format("servo=%.2f", servo_array[i]),
+                        String.format(" range=%.1f cm", distance_array[i]) );
+            }
+            telemetry.addData("Servo Position", "%5.2f", position);
+//            telemetry.addData("deviceName", sensorDistance.getDeviceName() );
 //            telemetry.addData("range", String.format("%.01f mm", sensorDistance.getDistance(DistanceUnit.MM)));
             telemetry.addData("range", String.format("%.01f cm", sensorDistance.getDistance(DistanceUnit.CM)));
 //            telemetry.addData("range", String.format("%.01f m", sensorDistance.getDistance(DistanceUnit.METER)));
 //            telemetry.addData("range", String.format("%.01f in", sensorDistance.getDistance(DistanceUnit.INCH)));
 
             // Rev2mDistanceSensor specific methods.
-            telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
-            telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
+//            telemetry.addData("ID", String.format("%x", sensorTimeOfFlight.getModelID()));
+//            telemetry.addData("did time out", Boolean.toString(sensorTimeOfFlight.didTimeoutOccur()));
 
             telemetry.update();
+
+            servo.setPosition(position);
+            sleep(CYCLE_MS);
+            idle();
+
         }
     }
 
