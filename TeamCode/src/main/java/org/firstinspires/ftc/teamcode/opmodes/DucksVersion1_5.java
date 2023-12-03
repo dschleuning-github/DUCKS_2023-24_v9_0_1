@@ -55,18 +55,22 @@ public class DucksVersion1_5 extends OpMode{
             //board.setServoDown();
             //board.setServoDown();
             //board.setRotationDirectionFORWARD();
-            board.setClawRotation(0.5);
+            board.setClawRotation(0.0);
         }
         if(gamepad2.y){
             //board.setServoUp();
             //board.setRotationDirectionREVERSE();
-            board.setClawRotation(30);
+            board.setClawRotation(0.5);
         }
         if(gamepad2.x){
             board.setClaw_1Active();
         }
         if(gamepad2.b){
+            board.setClaw_2Active();
+        }
+        if(gamepad2.right_bumper){
             board.setClaw_1Inactive();
+            board.setClaw_2Inactive();
         }
 
         telemetry.addData("Arm Speed: ", armSpeed);

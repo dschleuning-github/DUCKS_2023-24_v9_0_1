@@ -96,7 +96,7 @@ public class DucksProgrammingBoard1_4 {
         motor_arm_0.setPower(armspeed);
     }
     public void setClawRotation(double position) {
-        if (position > 0){
+        if (position >= 0){
             clawRotation.setDirection(Servo.Direction.FORWARD);
             clawRotation.setPosition(position);
         }
@@ -121,12 +121,22 @@ public class DucksProgrammingBoard1_4 {
     public void setClaw_1Position(double CLAW_1position) {
         CLAW_1.setPosition(CLAW_1position);
     }
+    public void setClaw_2Position(double CLAW_2position) {
+        CLAW_2.setPosition(CLAW_2position);
+    }
 
     public void setClaw_1Active() {
-        setClaw_1Position(0.1);
+        setClaw_1Position(-0.5);
+    }
+    public void setClaw_2Active() {
+        setClaw_2Position(0.1);
     }
     public void setClaw_1Inactive() {
-        setClaw_1Position(-0.5);
+        setClaw_1Position(0.15);
+
+    }
+    public void setClaw_2Inactive() {
+        setClaw_2Position(-0.5);
 
     }
     public void setClawZero(){
