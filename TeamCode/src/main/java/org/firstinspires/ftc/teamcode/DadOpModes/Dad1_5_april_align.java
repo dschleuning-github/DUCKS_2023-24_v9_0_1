@@ -61,7 +61,9 @@ public class Dad1_5_april_align extends OpMode{
 
 
         if (detectionFlag){
+
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
             telemetry.addData("# AprilTags Detected", currentDetections.size());
             for (AprilTagDetection detection : currentDetections) {
                 if (detection.metadata != null) {
