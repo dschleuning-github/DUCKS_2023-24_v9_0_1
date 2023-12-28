@@ -4,17 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.processors.FirstVisionProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
-
-import processors.FirstVisionProcessor;
 
 @Autonomous
 public class FirstVisionOpMode extends OpMode {
+//    private FirstVisionProcessor visionProcessor;
     private FirstVisionProcessor visionProcessor;
 //    public double satTest = 0;
 //    satTest = getAveSaturation(hsvMat, rectMiddle);
 
     private VisionPortal visionPortal;
+
     @Override
     public void init(){
         visionProcessor = new FirstVisionProcessor();
@@ -49,6 +50,5 @@ public class FirstVisionOpMode extends OpMode {
         telemetry.addData("Identified", visionProcessor.getSelection());
         telemetry.addData("test", visionProcessor.getData()[0]);
     }
-
 
 }
