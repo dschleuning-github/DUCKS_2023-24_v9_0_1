@@ -222,243 +222,245 @@ public class DucksAutonomous6 extends OpMode {
     }
 
     public void leftPlacement () {
-        int state = 0;
+        int state_left = 0;
 
-        if (state == 0) {
+        if (state_left == 0) {
             MoveSidewaysDistance(-90);
-            state =1;
+            state_left =1;
         }
-        if (state == 1) {
+        if (state_left == 1) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 2;
+            state_left = 2;
         }
-        if (state == 2) {
+        if (state_left == 2) {
             MoveForwardDistance(400, 0.4);
-            state = 3;
+            state_left = 3;
         }
-        if (state == 3) {
+        if (state_left == 3) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }            state = 4;
+            }
+            state_left = 4;
         }
-        if (state == 4){
+        if (state_left == 4){
             MoveArmDegrees(-13, 0.3);
-            state = 5;
+            state_left = 5;
         }
-        if (state == 5){
+        if (state_left == 5){
             board.setClawRotation(0.0);
-            state = 6;
+            state_left = 6;
         }
-        if (state == 6){
+        if (state_left == 6){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 7;
+            state_left = 7;
         }
-        if (state == 7) {
+        if (state_left == 7) {
             board.setClaw_1Inactive();
-            state = 8;
+            state_left = 8;
         }
-        if (state == 8) {
+        if (state_left == 8) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 9;
+            state_left = 9;
         }
-        if (state == 9){
+        if (state_left == 9){
             MoveArmDegrees(15, 0.3);
-            state = 10;
+            state_left = 10;
         }
-        if (state == 10) {
+        if (state_left == 10) {
             MoveForwardDistance(-200, 0.4);
-            state = 11;
+            state_left = 11;
         }
-        if (state == 11){
+        if (state_left == 11){
             MoveRotateDegrees(-90, 0.1);
-            state = 12;
+            state_left = 12;
         }
 
     }
     public void centerPlacement () {
-        int state = 0;
+        int state_center = 0;
 
-        if (state == 0) {
+        if (state_center == 0) {
             MoveForwardDistance(1050, 0.4);
-            state = 1;
+            state_center = 1;
         }
-        if (state == 1){
+        if (state_center == 1){
             MoveForwardDistance(-200, 0.4);
-            state = 2;
+            state_center = 2;
         }
-        if (state == 2) {
+        if (state_center == 2) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 3;
+            state_center = 3;
         }
-        if (state == 3) {
+        if (state_center == 3) {
             board.setClawRotation(0.0);
-            state = 4;
+            state_center = 4;
         }
-        if (state == 4){
+        if (state_center == 4){
             MoveArmDegrees(-13, 0.3);
-            state = 5;
+            state_center = 5;
         }
-        if (state == 5) {
+        if (state_center == 5) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 6;
+            state_center = 6;
         }
-        if (state == 6){
+        if (state_center == 6){
             board.setClaw_1Inactive();
-            state = 7;
+            state_center = 7;
         }
-        if (state == 7) {
+        if (state_center == 7) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 8;
+            state_center = 8;
         }
-        if (state == 8){
+        if (state_center == 8){
             MoveArmDegrees(15, 0.3);
-            state = 9;
+            state_center = 9;
         }
-        if (state == 9){
+        if (state_center == 9){
             MoveForwardDistance(-100, 0.4);
-            state = 10;
+            state_center = 10;
         }
-        if (state == 10){
+        if (state_center == 10){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 11;
+            state_center = 11;
         }
-        if (state == 11){
+        if (state_center == 11){
             MoveRotateDegrees(-90, 0.1);
-            state = 12;
+            state_center = 12;
         }
-        if (state == 12){
+        if (state_center == 12){
             board.setSideMotorSpeed(0.0);
             board.setForwardSpeed(0);
+            state_center = 13;
         }
 
     }
     public void rightPlacement() {
-        int state = 0;
-        if (state == 0){
+        int state_right = 0;
+        if (state_right == 0){
             MoveSidewaysDistance(-90);
-            state = 1;
+            state_right = 1;
         }
-        if (state == 1){
+        if (state_right == 1){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 2;
+            state_right = 2;
         }
-        if (state == 2){
+        if (state_right == 2){
             MoveForwardDistance(800, 0.4);
-            state = 3;
+            state_right = 3;
         }
-        if (state == 3){
+        if (state_right == 3){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 4;
+            state_right = 4;
         }
-        if (state == 4){
+        if (state_right == 4){
             MoveRotateDegrees(90, 0.1);
-            state = 5;
+            state_right = 5;
         }
-        if (state == 5){
+        if (state_right == 5){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 6;
+            state_right = 6;
         }
-        if (state == 6){
+        if (state_right == 6){
             MoveForwardDistance(550, 0.4);
-            state = 7;
+            state_right = 7;
         }
-        if (state == 7){
+        if (state_right == 7){
             MoveForwardDistance(-200, 0.3);
-            state = 8;
+            state_right = 8;
         }
-        if (state == 8){
+        if (state_right == 8){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 9;
+            state_right = 9;
         }
-        if (state == 9){
+        if (state_right == 9){
             board.setClawRotation(0.0);
-            state = 10;
+            state_right = 10;
         }
-        if (state == 10){
+        if (state_right == 10){
             MoveArmDegrees(-13, 0.3);
-            state = 11;
+            state_right = 11;
         }
-        if (state == 11){
+        if (state_right == 11){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 12;
+            state_right = 12;
         }
-        if (state == 12){
+        if (state_right == 12){
             board.setClaw_1Inactive();
-            state = 13;
+            state_right = 13;
         }
-        if (state == 13){
+        if (state_right == 13){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 14;
+            state_right = 14;
         }
-        if (state == 14){
+        if (state_right == 14){
             MoveForwardDistance(-300, 0.4);
-            state = 15;
+            state_right = 15;
         }
-        if (state == 15){
+        if (state_right == 15){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            state = 16;
+            state_right = 16;
         }
-        if (state == 16){
+        if (state_right == 16){
             MoveRotateDegrees(180, 0.1);
-            state = 17;
+            state_right = 17;
         }
     }
 
