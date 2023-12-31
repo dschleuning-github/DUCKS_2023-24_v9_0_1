@@ -17,6 +17,7 @@ public class DucksAutonomous6 extends OpMode {
     double sideconstant = Math.PI * 75 * 534 / 508 * 510 / 508 * 512 / 508;
     double armconstant = 360 * 30 / 125 * 30 / 125;
     int state;
+    int position;
     FirstVisionProcessor.Selected Position;
 
     private FirstVisionProcessor visionProcessor;
@@ -41,12 +42,12 @@ public class DucksAutonomous6 extends OpMode {
     @Override
     public void init_loop(){
         telemetry.addData("Identified_loop", visionProcessor.getSelection());
-        Position = visionProcessor.getSelection();
+
     }
 
     @Override
     public void start(){
-        visionPortal.stopStreaming();
+
     }
 
     @Override
@@ -70,31 +71,55 @@ public class DucksAutonomous6 extends OpMode {
             state = 3;
         }
         if (state == 3){
-            MoveSidewaysDistance(140);
+            board.setClawRotation(0.7);
             state = 4;
         }
         if (state == 4){
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
             state = 5;
         }
         if (state == 5){
-            if (Position .equals(FirstVisionProcessor.Selected.MIDDLE)){
-                centerPlacement();
-            }
-            if (Position == FirstVisionProcessor.Selected.LEFT) {
-                MoveSidewaysDistance(-140);
-                leftPlacement();
-            }
-            else {
-                //rightPlacement();
-            }
-
+            MoveSidewaysDistance(140);
             state = 6;
         }
+        if (state == 6){
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 7;
+        }
+        if (state == 7){
+            Position = visionProcessor.getSelection();
+
+            if (Position .equals(FirstVisionProcessor.Selected.MIDDLE)){
+                position = 2;
+                centerPlacement();
+                state = 8;
+            }
+            if (Position == FirstVisionProcessor.Selected.LEFT) {
+                position = 1;
+                MoveSidewaysDistance(-140);
+                leftPlacement();
+                state = 8;
+            }
+            else {
+                position = 3;
+                MoveSidewaysDistance(-140);
+                rightPlacement();
+                state = 8;
+            }
+        }
+        if (state == 8){
+            visionPortal.stopStreaming();
+            state = 9;
+        }
+
     }
 
     public void MoveForwardDistance(double distance, double forwardSpeed){
@@ -107,6 +132,10 @@ public class DucksAutonomous6 extends OpMode {
         if (distance > 0) {
             while (millimeters < distance) {
                 //elevatorheight();
+                if (millimeters > distance* 3/4){
+                    forwardSpeed = .2;
+                }
+
                 board.setForwardSpeed(forwardSpeed);
                 millimeters = (forwardconstant * (board.getMotorRotations() - initialWheelRotation));
                 telemetry.addData("millimeter slow", millimeters);
@@ -208,7 +237,7 @@ public class DucksAutonomous6 extends OpMode {
             state = 2;
         }
         if (state == 2) {
-            MoveForwardDistance(350, 0.4);
+            MoveForwardDistance(400, 0.4);
             state = 3;
         }
         if (state == 3) {
@@ -223,13 +252,79 @@ public class DucksAutonomous6 extends OpMode {
             state = 5;
         }
         if (state == 5){
+            board.setClawRotation(0.0);
+            state = 6;
+        }
+        if (state == 6){
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            }            state = 6;
+            }
+            state = 7;
         }
-        if (state == 6) {
+        if (state == 7) {
+            board.setClaw_1Inactive();
+            state = 8;
+        }
+        if (state == 8) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 9;
+        }
+        if (state == 9){
+            MoveArmDegrees(15, 0.3);
+            state = 10;
+        }
+        if (state == 10) {
+            MoveForwardDistance(-200, 0.4);
+            state = 11;
+        }
+        if (state == 11){
+            MoveRotateDegrees(-90, 0.1);
+            state = 12;
+        }
+
+    }
+    public void centerPlacement () {
+        int state = 0;
+
+        if (state == 0) {
+            MoveForwardDistance(1050, 0.4);
+            state = 1;
+        }
+        if (state == 1){
+            MoveForwardDistance(-200, 0.4);
+            state = 2;
+        }
+        if (state == 2) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 3;
+        }
+        if (state == 3) {
+            board.setClawRotation(0.0);
+            state = 4;
+        }
+        if (state == 4){
+            MoveArmDegrees(-13, 0.3);
+            state = 5;
+        }
+        if (state == 5) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 6;
+        }
+        if (state == 6){
             board.setClaw_1Inactive();
             state = 7;
         }
@@ -245,76 +340,126 @@ public class DucksAutonomous6 extends OpMode {
             MoveArmDegrees(15, 0.3);
             state = 9;
         }
-        if (state == 9) {
-            MoveForwardDistance(-320, 0.4);
-            state = 10;
-        }
-
-    }
-    public void centerPlacement () {
-        int state = 0;
-
-        if (state == 0) {
-            MoveForwardDistance(900, 0.4);
-            state = 1;
-        }
-        if (state == 1){
-            MoveForwardDistance(-100, 0.4);
-            state = 2;
-        }
-        if (state == 2) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            state = 3;
-        }
-        if (state == 3) {
-            MoveArmDegrees(-13, 0.3);
-            state = 4;
-        }
-        if (state == 4) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            state = 5;
-        }
-        if (state == 5){
-            board.setClaw_1Inactive();
-            state = 6;
-        }
-        if (state == 6) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            state = 7;
-        }
-        if (state == 7){
-            MoveArmDegrees(15, 0.3);
-            state = 8;
-        }
-        if (state == 8){
-            MoveForwardDistance(-100, 0.4);
-            state = 9;
-        }
         if (state == 9){
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            MoveForwardDistance(-100, 0.4);
             state = 10;
         }
         if (state == 10){
-            MoveRotateDegrees(-90, 0.1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             state = 11;
         }
+        if (state == 11){
+            MoveRotateDegrees(-90, 0.1);
+            state = 12;
+        }
+        if (state == 12){
+            board.setSideMotorSpeed(0.0);
+            board.setForwardSpeed(0);
+        }
 
+    }
+    public void rightPlacement() {
+        int state = 0;
+        if (state == 0){
+            MoveSidewaysDistance(-90);
+            state = 1;
+        }
+        if (state == 1){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 2;
+        }
+        if (state == 2){
+            MoveForwardDistance(800, 0.4);
+            state = 3;
+        }
+        if (state == 3){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 4;
+        }
+        if (state == 4){
+            MoveRotateDegrees(90, 0.1);
+            state = 5;
+        }
+        if (state == 5){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 6;
+        }
+        if (state == 6){
+            MoveForwardDistance(550, 0.4);
+            state = 7;
+        }
+        if (state == 7){
+            MoveForwardDistance(-200, 0.3);
+            state = 8;
+        }
+        if (state == 8){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 9;
+        }
+        if (state == 9){
+            board.setClawRotation(0.0);
+            state = 10;
+        }
+        if (state == 10){
+            MoveArmDegrees(-13, 0.3);
+            state = 11;
+        }
+        if (state == 11){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 12;
+        }
+        if (state == 12){
+            board.setClaw_1Inactive();
+            state = 13;
+        }
+        if (state == 13){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 14;
+        }
+        if (state == 14){
+            MoveForwardDistance(-300, 0.4);
+            state = 15;
+        }
+        if (state == 15){
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            state = 16;
+        }
+        if (state == 16){
+            MoveRotateDegrees(180, 0.1);
+            state = 17;
+        }
     }
 
 
