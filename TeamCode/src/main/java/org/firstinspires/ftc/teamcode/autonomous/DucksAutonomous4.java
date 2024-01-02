@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.firstinspires.ftc.teamcode.mechanisms.DucksProgrammingBoard1_4;
 
 @Autonomous
+@Disabled
 public class DucksAutonomous4 extends LinearOpMode {
     DucksProgrammingBoard1_4 board = new DucksProgrammingBoard1_4();
     double forwardconstant = Math.PI * 75 * 523.875/457.2 * 514.35/457.2 * 417.5125/457.2 * 665/635 * 641/635 * 638/635;
