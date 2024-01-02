@@ -14,7 +14,6 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Autonomous
-@Disabled
 public class DucksAutonomous4_5 extends LinearOpMode {
     DucksProgrammingBoard1_4 board = new DucksProgrammingBoard1_4();
     double forwardconstant = Math.PI * 75 * 523.875/457.2 * 514.35/457.2 * 417.5125/457.2 * 665/635 * 641/635 * 638/635;
@@ -45,33 +44,51 @@ public class DucksAutonomous4_5 extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (state == 0) {
+            if (state == 0){
+                board.setClaw_1Active();
+                board.setClaw_2Active();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                MoveArmDegrees(15, 0.3);
+                board.setClawRotation(0.7);
+                state = 1;
+            }
+            else if (state == 1) {
                 telemetryAprilTag();
                 telemetry.addData("main loop", id_1_x_position);
                 if (Math.abs(id_1_x_position) > 1) {
                     if (id_1_x_position > 0) {
                         board.setSideMotorSpeed(0.1);
                     }
-                    if (id_1_x_position < 0) {
+                    else if (id_1_x_position < 0) {
                         board.setSideMotorSpeed(-0.1);
                     }
                 }
                 else {
                     board.setSideMotorSpeed(0.0);
-                    state = 1;
-                }
-            }
-            if (state == 1){
-                telemetryAprilTag();
-                telemetry.addData("main loop", id_1_x_position);
-                if (id_1_y_position > 20) {
-                    board.setForwardSpeed(0.1);
-                }
-                else {
-                    board.setForwardSpeed(0.0);
                     state = 2;
                 }
             }
+            else if (state == 2){
+                board.setClawRotation(0.25);
+                MoveSidewaysDistance(100);
+                state = 3;
+            }
+            else if (state == 3){
+                telemetryAprilTag();
+                telemetry.addData("main loop", id_1_x_position);
+                if (id_1_y_position > 20) {
+                    board.setForwardSpeed(0.2);
+                }
+                else {
+                    board.setForwardSpeed(0.0);
+                    state = 4;
+                }
+            }
+            telemetry.addData("state: ", state);
             telemetry.update();
 
         }
