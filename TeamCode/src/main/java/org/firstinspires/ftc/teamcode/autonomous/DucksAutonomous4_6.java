@@ -68,10 +68,10 @@ public class DucksAutonomous4_6 extends LinearOpMode {
                 state = 1;
             }
             else if (state == 1) {
-                telemetryAprilTag();
                 if (Position == 1){
-                    telemetry.addData("main loop", id_1_x_position);
                     if(state_left == 0) {
+                        telemetryAprilTag();
+                        telemetry.addData("main loop", id_1_x_position);
                         if (Math.abs(id_1_x_position) > 1) {
                             if (id_1_x_position > 0) {
                                 board.setSideMotorSpeed(0.1);
