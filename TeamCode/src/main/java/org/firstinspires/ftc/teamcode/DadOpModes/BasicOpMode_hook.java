@@ -68,13 +68,13 @@ public class BasicOpMode_hook extends LinearOpMode {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "motor0");
-       // rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        rightDrive = hardwareMap.get(DcMotor.class, "motor1");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        //rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -85,17 +85,17 @@ public class BasicOpMode_hook extends LinearOpMode {
 
             // Setup a variable for each drive wheel to save power level for telemetry
             double leftPower;
-           // double rightPower;
+            double rightPower;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            //double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive, -1.0, 1.0) ;
-            //rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+            double leftMotor = gamepad1.left_stick_y;
+            double rightMotor  =  -gamepad1.right_stick_y;
+            leftPower    = Range.clip(leftMotor, -1.0, 1.0) ;
+            rightPower   = Range.clip(rightMotor, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -104,7 +104,7 @@ public class BasicOpMode_hook extends LinearOpMode {
 
             // Send calculated power to wheels
             leftDrive.setPower(leftPower);
-          //  rightDrive.setPower(rightPower);
+            rightDrive.setPower(rightPower);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
