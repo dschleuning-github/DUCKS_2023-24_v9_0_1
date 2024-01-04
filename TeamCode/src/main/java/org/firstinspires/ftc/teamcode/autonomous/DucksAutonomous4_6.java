@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -21,21 +20,20 @@ public class DucksAutonomous4_6 extends LinearOpMode {
     double sideconstant = Math.PI * 75 * 534/508 * 510/508 * 512/508;
     double armconstant = 360 * 30/125 * 30/125 ;
     int state;
-    int state_left;
-    int state_center;
-    int state_right;
-
+    int Position = 2;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
-    public int Position;
+
     public double id_1_x_position;
     public double id_1_y_position;
     public double id_2_x_position;
     public double id_2_y_position;
     public double id_3_x_position;
     public double id_3_y_position;
+    public double rotate_degree;
+    public double degree;
 
 
     @Override
@@ -45,12 +43,11 @@ public class DucksAutonomous4_6 extends LinearOpMode {
 
         initAprilTag();
 
-        Position = 1;
         telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
-            if (state == 0) {
+            if (state == 0){
                 board.setClaw_1Active();
                 board.setClaw_2Active();
                 try {
@@ -67,75 +64,135 @@ public class DucksAutonomous4_6 extends LinearOpMode {
                 }
                 state = 1;
             }
-            else if (state == 1) {
+            else if (state == 1){
+                telemetryAprilTag();
+                rotate_degree = Math.atan((id_3_y_position - id_1_y_position)/(id_3_x_position - id_1_x_position));
+                telemetry.addData("rotate degree: ", rotate_degree);
+                //MoveRotateDegrees(rotate_degree, 0.1);
+                degree = - rotate_degree;
+                MoveRotateDegrees(-Math.atan((id_3_y_position - id_1_y_position)/(id_3_x_position - id_1_x_position)), 0.1);
+                state = 8;
+            }
+            else if (state == 2) {
+                telemetryAprilTag();
+                telemetry.addData("main loop", id_1_x_position);
                 if (Position == 1){
-                    if(state_left == 0) {
-                        telemetryAprilTag();
-                        telemetry.addData("main loop", id_1_x_position);
-                        if (Math.abs(id_1_x_position) > 1) {
-                            if (id_1_x_position > 0) {
-                                board.setSideMotorSpeed(0.1);
-                            }
-                            else if (id_1_x_position < 0) {
-                                board.setSideMotorSpeed(-0.1);
-                            }
+                    if (Math.abs(id_1_x_position) > 1) {
+                        if (id_1_x_position > 0) {
+                            board.setSideMotorSpeed(0.1);
                         }
-                        else {
-                            board.setSideMotorSpeed(0.0);
-                            state_left = 1;
+                        else if (id_1_x_position < 0) {
+                            board.setSideMotorSpeed(-0.1);
                         }
                     }
-                    else if (state_left == 1){
-                        board.setClawRotation(0.25);
-                        MoveSidewaysDistance(50);
-                        state_left = 2;
-                    }
-                    else if (state_left == 2){
-                        telemetryAprilTag();
-                        telemetry.addData("main loop", id_1_y_position);
-                        if (id_1_y_position > 20) {
-                            board.setForwardSpeed(0.2);
-                        }
-                        else {
-                            board.setForwardSpeed(0.0);
-                            state_left = 3;
-                        }
-                    }
-                    else if (state_left == 3){
-                        MoveForwardDistance(65, 0.1);
-                        state_left = 4;
-                    }
-                    else if (state_left == 4){
-                        board.setClaw_2Inactive();
-                        try {
-                            Thread.sleep(800);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
-                        board.setClawRotation(0.7);
-                        state_left = 5;
-                    }
-                    else if (state_left == 5){
-                        MoveForwardDistance(-100, 0.2);
-                        MoveSidewaysDistance(-500);
-                        MoveForwardDistance(450, 0.3);
-                        state_left = 6;
+                    else {
+                        board.setSideMotorSpeed(0.0);
+                        state = 3;
                     }
                 }
                 else if (Position == 2){
-                    board.setClaw_2Inactive();
+                    if (Math.abs(id_2_x_position) > 1) {
+                        if (id_2_x_position > 0) {
+                            telemetry.addData("ID 2 x position: ", id_2_x_position);
+                            board.setSideMotorSpeed(0.1);
+                            telemetry.update();
+                        }
+                        else if (id_2_x_position < 0) {
+                            telemetry.addData("ID 2 x position: ", id_2_x_position);
+                            board.setSideMotorSpeed(-0.1);
+                            telemetry.update();
+                        }
+                    }
+                    else {
+                        board.setSideMotorSpeed(0.0);
+                        state = 3;
+                    }
                 }
-                else if (Position == 3){
-                    board.setClaw_1Inactive();
+                else {
+                    if (Math.abs(id_3_x_position) > 0.3) {
+                        if (id_3_x_position > 0) {
+                            board.setSideMotorSpeed(0.1);
+                        }
+                        else if (id_3_x_position < 0) {
+                            board.setSideMotorSpeed(-0.1);
+                        }
+                    }
+                    else {
+                        board.setSideMotorSpeed(0.0);
+                        state = 3;
+                    }
                 }
-                state = 2;
+
+            }
+            else if (state == 3){
+                board.setClawRotation(0.25);
+                MoveSidewaysDistance(50);
+                state = 4;
+            }
+            else if (state == 4){
+                telemetryAprilTag();
+                telemetry.addData("main loop", id_1_y_position);
+                if (Position == 1){
+                    if (id_1_y_position > 20) {
+                        board.setForwardSpeed(0.2);
+                    }
+                    else {
+                        board.setForwardSpeed(0.0);
+                        state = 5;
+                    }
+                }
+                else if (Position == 2){
+                    if (id_2_y_position > 20) {
+                        board.setForwardSpeed(0.2);
+                    }
+                    else {
+                        board.setForwardSpeed(0.0);
+                        state = 5;
+                    }
+                }
+                else {
+                    if (id_3_y_position > 20) {
+                        board.setForwardSpeed(0.2);
+                    }
+                    else {
+                        board.setForwardSpeed(0.0);
+                        state = 5;
+                    }
+                }
+
+            }
+            else if (state == 5){
+                MoveForwardDistance(65, 0.1);
+                state = 6;
+            }
+            else if (state == 6){
+                board.setClaw_2Inactive();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                state = 7;
+            }
+            else if (state == 7){
+                MoveForwardDistance(-100, 0.2);
+                board.setClawRotation(0.7);
+                if (Position == 1){
+                    MoveSidewaysDistance(-500);
+                }
+                else if (Position == 2){
+                    MoveSidewaysDistance(-680);
+                }
+                else{
+                    MoveSidewaysDistance(500);
+                }
+                MoveForwardDistance(480, 0.3);
+                state = 8;
             }
 
         }
-
         telemetry.addData("state: ", state);
         telemetry.update();
-
     }
 
     private void initAprilTag() {
@@ -290,5 +347,3 @@ public class DucksAutonomous4_6 extends LinearOpMode {
         telemetry.update();
     }
 }
-
-
