@@ -60,7 +60,7 @@ public class DucksAutonomous6 extends OpMode {
         }
         else if (state == 1) {
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -83,12 +83,12 @@ public class DucksAutonomous6 extends OpMode {
             state = 5;
         }
         else if (state == 5){
-            MoveSidewaysDistance(140);
+            MoveSidewaysDistance(75);
             state = 6;
         }
         else if (state == 6){
             try {
-                Thread.sleep(100);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -99,18 +99,19 @@ public class DucksAutonomous6 extends OpMode {
 
             if (Position .equals(FirstVisionProcessor.Selected.MIDDLE)){
                 position = 2;
+                MoveSidewaysDistance(65);
                 centerPlacement();
                 state = 8;
             }
             else if (Position == FirstVisionProcessor.Selected.LEFT) {
                 position = 1;
-                MoveSidewaysDistance(-140);
+                MoveSidewaysDistance(-75);
                 leftPlacement();
                 state = 8;
             }
             else {
                 position = 3;
-                MoveSidewaysDistance(-140);
+                //MoveSidewaysDistance(-75);
                 rightPlacement();
                 state = 8;
             }
@@ -255,9 +256,14 @@ public class DucksAutonomous6 extends OpMode {
     }
     public void centerPlacement () {
         MoveForwardDistance(1050, 0.4);
-        MoveForwardDistance(-200, 0.4);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        MoveForwardDistance(-175, 0.2);
+        try {
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -270,37 +276,43 @@ public class DucksAutonomous6 extends OpMode {
         }
         board.setClaw_1Inactive();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         MoveArmDegrees(15, 0.3);
-        MoveForwardDistance(-100, 0.4);
+        board.setClawRotation(0.7);
+        MoveForwardDistance(-35, 0.2);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        MoveRotateDegrees(-90, 0.1);
+        MoveRotateDegrees(-91, 0.1);
         board.setSideMotorSpeed(0.0);
         board.setForwardSpeed(0);
     }
     public void rightPlacement() {
-        MoveSidewaysDistance(-90);
+        //MoveSidewaysDistance(-90);
         MoveForwardDistance(800, 0.5);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        MoveRotateDegrees(90, 0.2);
+        MoveRotateDegrees(90, 0.1);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        MoveForwardDistance(550, 0.45);
-        MoveForwardDistance(-185, 0.45);
+        MoveForwardDistance(380, 0.4);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        MoveForwardDistance(-195, 0.4);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -325,13 +337,13 @@ public class DucksAutonomous6 extends OpMode {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        MoveForwardDistance(-300, 0.45);
+        MoveForwardDistance(-50, 0.4);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        MoveRotateDegrees(180, 0.2);
+        MoveRotateDegrees(180, 0.1);
     }
 
 
