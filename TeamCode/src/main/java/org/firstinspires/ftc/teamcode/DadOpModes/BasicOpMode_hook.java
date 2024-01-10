@@ -74,7 +74,7 @@ public class BasicOpMode_hook extends LinearOpMode {
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -93,7 +93,7 @@ public class BasicOpMode_hook extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double leftMotor = gamepad1.left_stick_y;
-            double rightMotor  =  -gamepad1.right_stick_y;
+            double rightMotor  =  gamepad1.right_stick_y;
             leftPower    = Range.clip(leftMotor, -1.0, 1.0) ;
             rightPower   = Range.clip(rightMotor, -1.0, 1.0) ;
 

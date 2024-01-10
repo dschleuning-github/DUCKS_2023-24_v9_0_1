@@ -19,12 +19,14 @@ public class DucksProgrammingBoard1_4 {
     private Servo CLAW_1;
     private Servo CLAW_2;
     private Servo droneLauncher;
+    /*
     //private Servo claw_left;
     //private Servo claw_right;
     //private Servo DuckServo_0;
     //private Servo DuckServo_1;
     //private Servo DuckServo_2;
     //private Servo DuckServo_3;
+    */
 
 
     public void init(HardwareMap hwMap) {
