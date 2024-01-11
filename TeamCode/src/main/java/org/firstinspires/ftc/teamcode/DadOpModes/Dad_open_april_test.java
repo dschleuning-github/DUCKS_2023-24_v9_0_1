@@ -35,20 +35,12 @@ public class Dad_open_april_test extends OpMode{
 
     @Override
     public void init() {
-
         aprilTag = AprilTagProcessor.easyCreateWithDefaults();
-//        visionPortal = VisionPortal.easyCreateWithDefaults(
-//                        hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
-
         visionProcessor = new FirstVisionProcessor();
-//        visionPortalopenCV = VisionPortal.easyCreateWithDefaults(
-//                hardwareMap.get(WebcamName.class, "Webcam 2"), visionProcessor);
-
-        // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-        //..........
+        // Wait for the DS start button to be touched.
     }
     @Override
     public void loop() {
