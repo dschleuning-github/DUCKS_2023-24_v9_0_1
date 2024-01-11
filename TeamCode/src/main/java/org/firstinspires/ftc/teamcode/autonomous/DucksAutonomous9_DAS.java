@@ -59,16 +59,15 @@ public class DucksAutonomous9_DAS extends OpMode {
     }
     @Override
     public void loop() {
-        if (state ==0){
+        /*if (state ==0){
             MoveRotateDegrees(90,0.5);
             state = 54;
-            /*
+            */
         if (state == 0) {
             board.setClaw_1Active();
             board.setClaw_2Active();
             board.setClawRotation(0);
             state = 1;
- */
         } else if (state == 1) {
             ducksSleepMilliSec(500);
             state = 2;
@@ -107,29 +106,22 @@ public class DucksAutonomous9_DAS extends OpMode {
             }
         } else if (state == 8) {
 //            visionPortal.stopStreaming();
-            visionPortal.close();
+            /*visionPortal.close();
             visionPortal = VisionPortal.easyCreateWithDefaults(
                     hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
-
+*/
+            //ducksSleepMilliSec(1500);
             state = 9;
         }
 
         if (state == 9) {
 //            VisionPortal.resumeStreaming();
 //            initAprilTag();
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            //ducksSleepMilliSec(300);
             state = 10;
         } else if (state == 10) {
-            telemetryAprilTag();
-            //rotate_degree = Math.atan((id_3_y_position - id_1_y_position)/(id_3_x_position - id_1_x_position));
-            //telemetry.addData("rotate degree: ", rotate_degree);
-            //MoveRotateDegrees(rotate_degree, 0.1);
-            //degree = - rotate_degree;
-            //MoveRotateDegrees(-Math.atan((id_3_y_position - id_1_y_position)/(id_3_x_position - id_1_x_position)), 0.1);
+            //MoveForwardDistance(100, 0.2);
+            //ducksSleepMilliSec(200);
             state = 11;
         } else if (state == 11) {
             telemetryAprilTag();
@@ -208,11 +200,7 @@ public class DucksAutonomous9_DAS extends OpMode {
             state = 15;
         } else if (state == 15) {
             board.setClaw_2Inactive();
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            ducksSleepMilliSec(300);
             state = 16;
         } else if (state == 16) {
             MoveForwardDistance(-100, 0.2);
@@ -373,125 +361,73 @@ public class DucksAutonomous9_DAS extends OpMode {
     }
 
     public void leftPlacement () {
-        MoveSidewaysDistance(-90);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        MoveForwardDistance(400, 0.4);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        MoveArmDegrees(-13, 0.3);
-        board.setClawRotation(0.0);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        board.setClaw_1Inactive();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        MoveArmDegrees(15, 0.3);
-        MoveForwardDistance(-200, 0.4);
-        MoveRotateDegrees(-90, 0.1);
-    }
-    public void centerPlacement () {
-        MoveForwardDistance(1050, 0.4);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        MoveForwardDistance(-175, 0.2);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        visionPortal.close();
+        MoveSidewaysDistance(-95);
+        ducksSleepMilliSec(1000);
+        MoveForwardDistance(950, 0.4);
+        ducksSleepMilliSec(1000);
+        MoveForwardDistance(-205, 0.2);
         board.setClawRotation(0.0);
         MoveArmDegrees(-13, 0.3);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(1000);
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
         board.setClaw_1Inactive();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(1000);
         MoveArmDegrees(15, 0.3);
         board.setClawRotation(0.7);
-        MoveForwardDistance(-35, 0.2);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        MoveForwardDistance(-75, 0.2);
+        ducksSleepMilliSec(500);
+        MoveRotateDegrees(-90, 0.1);
+        ducksSleepMilliSec(500);
+    }
+    public void centerPlacement () {
+        visionPortal.close();
+        MoveForwardDistance(1050, 0.4);
+        ducksSleepMilliSec(500);
+        MoveForwardDistance(-175, 0.2);
+        ducksSleepMilliSec(500);
+        board.setClawRotation(0.0);
+        MoveArmDegrees(-13, 0.3);
+        ducksSleepMilliSec(500);
+        board.setClaw_1Inactive();
+        ducksSleepMilliSec(500);
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
+        MoveArmDegrees(15, 0.3);
+        board.setClawRotation(0.7);
+        MoveForwardDistance(-50, 0.2);
+        ducksSleepMilliSec(500);
         MoveRotateDegrees(-91, 0.1);
-        board.setSideMotorSpeed(0.0);
-        board.setForwardSpeed(0);
+        ducksSleepMilliSec(1000);
+
     }
     public void rightPlacement() {
         //MoveSidewaysDistance(-90);
+        visionPortal.close();
         MoveForwardDistance(800, 0.5);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(1000);
         MoveRotateDegrees(90, 0.1);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(600);
         MoveForwardDistance(380, 0.4);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(500);
         MoveForwardDistance(-195, 0.4);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(500);
         board.setClawRotation(0.0);
         MoveArmDegrees(-13, 0.5);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(500);
         board.setClaw_1Inactive();
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(100);
+        visionPortal = VisionPortal.easyCreateWithDefaults(
+                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTag);
         MoveArmDegrees(15, 0.5);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(500);
         MoveForwardDistance(-50, 0.4);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ducksSleepMilliSec(500);
         MoveRotateDegrees(180, 0.1);
+        ducksSleepMilliSec(500);
+        MoveForwardDistance(100, 0.2);
+        ducksSleepMilliSec(500);
     }
     private void telemetryAprilTag() {
 
