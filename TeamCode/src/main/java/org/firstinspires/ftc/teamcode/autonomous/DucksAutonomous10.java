@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.mechanisms.DucksProgrammingBoard1_4;
 import org.firstinspires.ftc.teamcode.processors.FirstVisionProcessor;
@@ -13,9 +11,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+
 @Autonomous
 //@Disabled
-public class DucksAutonomous9_DAS extends OpMode {
+public class DucksAutonomous10 extends OpMode {
     DucksProgrammingBoard1_4 board = new DucksProgrammingBoard1_4();
     double forwardconstant = Math.PI * 75 * 523.875 / 457.2 * 514.35 / 457.2 * 417.5125 / 457.2 * 665 / 635 * 641 / 635 * 638 / 635;
     double rotationConstant = 360 * ((75 * Math.PI) / (545 * Math.PI)) * 92 / 90 * 90.7 / 90 * 88.8103 / 90 * 177/180;
@@ -76,7 +75,7 @@ public class DucksAutonomous9_DAS extends OpMode {
             ducksSleepMilliSec(500);
             state = 2;
         } else if (state == 2) {
-            MoveArmDegrees(15, 0.7);
+            MoveArmDegrees(30, 0.7);
             state = 6;
         } else if (state == 6) {
             //ducksSleepMilliSec(1000);
@@ -85,36 +84,34 @@ public class DucksAutonomous9_DAS extends OpMode {
             if (Position.equals(FirstVisionProcessor.Selected.MIDDLE)) {
                 position = 2;
                 MoveSidewaysDistance(130, 0.4);
-                MoveArmDegrees(15, 0.7);
                 centerPlacement();
                 state = 11;
             } else if (Position == FirstVisionProcessor.Selected.LEFT) {
                 position = 1;
                 MoveSidewaysDistance(-90, 0.4);
-                MoveArmDegrees(15, 0.7);
                 leftPlacement();
                 state = 11;
             } else {
                 position = 3;
                 //MoveSidewaysDistance(-75);
                 MoveSidewaysDistance(130, 0.4);
-                MoveArmDegrees(15, 0.7);
                 rightPlacement();
                 state = 11;
             }
         }
         else if (state == 11) {
-            ducksSleepMilliSec(500);
+            ducksSleepMilliSec(1000);
             telemetryAprilTag();
             telemetry.addData("state11 align x for pos ", position);
             if (position == 1) {
                 telemetry.addData("id_1_x_position",id_1_x_position);
                 if (Math.abs(id_1_x_position) > 1) {
-                    if (id_1_x_position > 0) {
+                    MoveSidewaysDistance(id_1_x_position * 25.4, 0.3);
+                    /*if (id_1_x_position > 0) {
                         board.setSideMotorSpeed(0.1);
                     } else if (id_1_x_position < 0) {
                         board.setSideMotorSpeed(-0.1);
-                    }
+                    }*/
                 } else {
                     board.setSideMotorSpeed(0.0);
                     state = 12;
@@ -122,7 +119,8 @@ public class DucksAutonomous9_DAS extends OpMode {
             } else if (position == 2) {
                 telemetry.addData("id_2_x_position",id_2_x_position);
                 if (Math.abs(id_2_x_position) > 1) {
-                    if (id_2_x_position > 0) {
+                    MoveSidewaysDistance(id_2_x_position * 25.4, 0.3);
+                    /*if (id_2_x_position > 0) {
                         //telemetry.addData("ID 2 x position: ", id_2_x_position);
                         board.setSideMotorSpeed(0.1);
                         //telemetry.update();
@@ -130,19 +128,20 @@ public class DucksAutonomous9_DAS extends OpMode {
                         //telemetry.addData("ID 2 x position: ", id_2_x_position);
                         board.setSideMotorSpeed(-0.1);
                         //telemetry.update();
-                    }
+                    }*/
                 } else {
                     board.setSideMotorSpeed(0.0);
                     state = 12;
                 }
             } else {
                 telemetry.addData("id_3_x_position",id_3_x_position);
-                if (Math.abs(id_3_x_position) > 0.3) {
-                    if (id_3_x_position > 0) {
+                if (Math.abs(id_3_x_position) > 1) {
+                    MoveSidewaysDistance(id_3_x_position * 25.4, 0.3);
+                    /*if (id_3_x_position > 0) {
                         board.setSideMotorSpeed(0.1);
                     } else if (id_3_x_position < 0) {
                         board.setSideMotorSpeed(-0.1);
-                    }
+                    } */
                 } else {
                     board.setSideMotorSpeed(0.0);
                     state = 12;
@@ -157,21 +156,24 @@ public class DucksAutonomous9_DAS extends OpMode {
             //telemetry.addData("main loop", id_1_y_position);
             if (position == 1) {
                 if (id_1_y_position > 20) {
-                    board.setForwardSpeed(0.2);
+                    MoveSidewaysDistance(id_1_y_position * 25.4, 0.3);
+                    //board.setForwardSpeed(0.2);
                 } else {
                     board.setForwardSpeed(0.0);
                     state = 14;
                 }
             } else if (position == 2) {
                 if (id_2_y_position > 20) {
-                    board.setForwardSpeed(0.2);
+                    MoveSidewaysDistance(id_2_y_position * 25.4, 0.3);
+                    //board.setForwardSpeed(0.2);
                 } else {
                     board.setForwardSpeed(0.0);
                     state = 14;
                 }
             } else {
                 if (id_3_y_position > 20) {
-                    board.setForwardSpeed(0.2);
+                    MoveSidewaysDistance(id_3_y_position * 25.4, 0.3);
+                    //board.setForwardSpeed(0.2);
                 } else {
                     board.setForwardSpeed(0.0);
                     state = 14;
@@ -182,7 +184,7 @@ public class DucksAutonomous9_DAS extends OpMode {
         } else if (state == 14) {
             MoveSidewaysDistance(140, 0.2);
             board.setClawRotation(0.25);
-            MoveForwardDistance(45, 0.6);
+            //MoveForwardDistance(45, 0.6);
             state = 15;
         } else if (state == 15) {
             board.setClaw_2Inactive();

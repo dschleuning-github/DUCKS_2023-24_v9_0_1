@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.mechanisms.DucksProgrammingBoard1_4;
 import org.firstinspires.ftc.teamcode.processors.FirstVisionProcessor;
@@ -13,9 +11,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
+
 @Autonomous
 //@Disabled
-public class DucksAutonomous9_DAS extends OpMode {
+public class DucksAutonomous_BlueFar extends OpMode {
     DucksProgrammingBoard1_4 board = new DucksProgrammingBoard1_4();
     double forwardconstant = Math.PI * 75 * 523.875 / 457.2 * 514.35 / 457.2 * 417.5125 / 457.2 * 665 / 635 * 641 / 635 * 638 / 635;
     double rotationConstant = 360 * ((75 * Math.PI) / (545 * Math.PI)) * 92 / 90 * 90.7 / 90 * 88.8103 / 90 * 177/180;
@@ -90,7 +89,7 @@ public class DucksAutonomous9_DAS extends OpMode {
                 state = 11;
             } else if (Position == FirstVisionProcessor.Selected.LEFT) {
                 position = 1;
-                MoveSidewaysDistance(-90, 0.4);
+                MoveSidewaysDistance(130, 0.4);
                 MoveArmDegrees(15, 0.7);
                 leftPlacement();
                 state = 11;
@@ -102,105 +101,6 @@ public class DucksAutonomous9_DAS extends OpMode {
                 rightPlacement();
                 state = 11;
             }
-        }
-        else if (state == 11) {
-            ducksSleepMilliSec(500);
-            telemetryAprilTag();
-            telemetry.addData("state11 align x for pos ", position);
-            if (position == 1) {
-                telemetry.addData("id_1_x_position",id_1_x_position);
-                if (Math.abs(id_1_x_position) > 1) {
-                    if (id_1_x_position > 0) {
-                        board.setSideMotorSpeed(0.1);
-                    } else if (id_1_x_position < 0) {
-                        board.setSideMotorSpeed(-0.1);
-                    }
-                } else {
-                    board.setSideMotorSpeed(0.0);
-                    state = 12;
-                }
-            } else if (position == 2) {
-                telemetry.addData("id_2_x_position",id_2_x_position);
-                if (Math.abs(id_2_x_position) > 1) {
-                    if (id_2_x_position > 0) {
-                        //telemetry.addData("ID 2 x position: ", id_2_x_position);
-                        board.setSideMotorSpeed(0.1);
-                        //telemetry.update();
-                    } else if (id_2_x_position < 0) {
-                        //telemetry.addData("ID 2 x position: ", id_2_x_position);
-                        board.setSideMotorSpeed(-0.1);
-                        //telemetry.update();
-                    }
-                } else {
-                    board.setSideMotorSpeed(0.0);
-                    state = 12;
-                }
-            } else {
-                telemetry.addData("id_3_x_position",id_3_x_position);
-                if (Math.abs(id_3_x_position) > 0.3) {
-                    if (id_3_x_position > 0) {
-                        board.setSideMotorSpeed(0.1);
-                    } else if (id_3_x_position < 0) {
-                        board.setSideMotorSpeed(-0.1);
-                    }
-                } else {
-                    board.setSideMotorSpeed(0.0);
-                    state = 12;
-                }
-            }
-
-        } else if (state == 12) {
-            //
-            state = 13;
-        } else if (state == 13) {
-            telemetryAprilTag();
-            //telemetry.addData("main loop", id_1_y_position);
-            if (position == 1) {
-                if (id_1_y_position > 20) {
-                    board.setForwardSpeed(0.2);
-                } else {
-                    board.setForwardSpeed(0.0);
-                    state = 14;
-                }
-            } else if (position == 2) {
-                if (id_2_y_position > 20) {
-                    board.setForwardSpeed(0.2);
-                } else {
-                    board.setForwardSpeed(0.0);
-                    state = 14;
-                }
-            } else {
-                if (id_3_y_position > 20) {
-                    board.setForwardSpeed(0.2);
-                } else {
-                    board.setForwardSpeed(0.0);
-                    state = 14;
-                }
-            }
-            //ducksSleepMilliSec(5000);
-
-        } else if (state == 14) {
-            MoveSidewaysDistance(140, 0.2);
-            board.setClawRotation(0.25);
-            MoveForwardDistance(45, 0.6);
-            state = 15;
-        } else if (state == 15) {
-            board.setClaw_2Inactive();
-            ducksSleepMilliSec(300);
-            state = 16;
-        } else if (state == 16) {
-            MoveForwardDistance(-100, 0.4);
-            ducksSleepMilliSec(200);
-            board.setClawRotation(0.0);
-            if (position == 1) {
-                MoveSidewaysDistance(-450, 0.2);
-            } else if (position == 2) {
-                MoveSidewaysDistance(-650, 0.2);
-            } else {
-                MoveSidewaysDistance(500, 0.2);
-            }
-            MoveForwardDistance(460, 0.6);
-            state = 17;
         }
 
         telemetry.addData("state = ", state);
@@ -387,20 +287,26 @@ public class DucksAutonomous9_DAS extends OpMode {
 
     public void leftPlacement () {
         //MoveSidewaysDistance(-95);
-        ducksSleepMilliSec(300);
-        MoveForwardDistance(950, 0.7);
-        ducksSleepMilliSec(100);
-        MoveForwardDistance(-205, 0.4);
+        MoveForwardDistance(800, 0.7);
+        ducksSleepMilliSec(200);
+        MoveRotateDegrees(-90, 0.4);
+        //ducksSleepMilliSec(600);
+        MoveForwardDistance(330, 0.6);
+        //ducksSleepMilliSec(500);
+        MoveForwardDistance(-240, 0.6);
+        //ducksSleepMilliSec(500);
         board.setClawRotation(0.0);
         MoveArmDegrees(-28, 0.6);
-        ducksSleepMilliSec(1000);
+        ducksSleepMilliSec(300);
         board.setClaw_1Inactive();
-        //ducksSleepMilliSec(1000);
+        //ducksSleepMilliSec(100);
         MoveArmDegrees(15, 0.6);
-        //board.setClawRotation(0.7);
-        MoveForwardDistance(-75, 0.4);
-        ducksSleepMilliSec(500);
-        MoveRotateDegrees(-90, 0.4);
+        //ducksSleepMilliSec(500);
+        MoveForwardDistance(-50, 0.4);
+        ducksSleepMilliSec(300);
+        //MoveRotateDegrees(180, 0.35);
+        //ducksSleepMilliSec(500);
+        //MoveForwardDistance(160, 0.4);
         //ducksSleepMilliSec(500);
     }
     public void centerPlacement () {
@@ -417,8 +323,8 @@ public class DucksAutonomous9_DAS extends OpMode {
         //board.setClawRotation(0.7);
         MoveForwardDistance(-50, 0.4);
         ducksSleepMilliSec(500);
-        MoveRotateDegrees(-90, 0.4);
-        MoveForwardDistance(50, 0.4);
+        //MoveRotateDegrees(-90, 0.4);
+        //MoveForwardDistance(50, 0.4);
         //ducksSleepMilliSec(1000);
 
     }
@@ -430,7 +336,7 @@ public class DucksAutonomous9_DAS extends OpMode {
         //ducksSleepMilliSec(600);
         MoveForwardDistance(330, 0.6);
         //ducksSleepMilliSec(500);
-        MoveForwardDistance(-220, 0.6);
+        MoveForwardDistance(-240, 0.6);
         //ducksSleepMilliSec(500);
         board.setClawRotation(0.0);
         MoveArmDegrees(-28, 0.6);
@@ -440,11 +346,11 @@ public class DucksAutonomous9_DAS extends OpMode {
         MoveArmDegrees(15, 0.6);
         //ducksSleepMilliSec(500);
         MoveForwardDistance(-50, 0.4);
-        ducksSleepMilliSec(300);
-        MoveRotateDegrees(180, 0.35);
+        //ducksSleepMilliSec(300);
+        //MoveRotateDegrees(180, 0.35);
         //ducksSleepMilliSec(500);
-        MoveForwardDistance(160, 0.4);
-        ducksSleepMilliSec(500);
+        //MoveForwardDistance(160, 0.4);
+        //ducksSleepMilliSec(500);
     }
     private void telemetryAprilTag() {
 
